@@ -1,0 +1,3 @@
+[workspace]
+members = ["swampqueen-core", "swampqueen-desktop"]
+resolver = "2"

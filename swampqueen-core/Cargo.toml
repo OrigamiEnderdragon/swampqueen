@@ -1,0 +1,7 @@
+[package]
+name = "swampqueen-core"
+version = "0.1.0"
+authors = ["M Siwak", "Max Gilmour"]
+edition = "2024"
+
+[dependencies]
