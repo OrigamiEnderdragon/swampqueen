@@ -1,3 +1,6 @@
+//! All functionality related to in-game locations. This module is centred around the [`Location`]
+//! type, which stores all data related to that location.
+
 use std::{collections::HashMap, io, sync::LazyLock};
 
 use camino::Utf8PathBuf;
