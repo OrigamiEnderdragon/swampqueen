@@ -1,3 +1,5 @@
+//! Functionality related to dice-rolling.
+
 use std::{fmt::Display, sync::OnceLock};
 
 use color_eyre::eyre::{self, eyre};
@@ -7,6 +9,7 @@ use regex::Regex;
 static ROLL_REG: OnceLock<Regex> = OnceLock::new();
 
 fn get_roll_reg() -> &'static Regex {
+    #[allow(clippy::unwrap_used)]
     ROLL_REG.get_or_init(|| Regex::new(r"^(\d+)d(\d+)$").unwrap())
 }
 
@@ -41,7 +44,7 @@ impl Display for RolledDiceResults {
                     }
                 });
                 let results_sum: usize = self.results.iter().sum();
-                write!(f, "{}={}", results_str, results_sum)
+                write!(f, "{results_str}={results_sum}")
             }
         }
     }
@@ -89,19 +92,21 @@ fn parse_roll_many_str(input_str: &str) -> eyre::Result<RollManyRequest> {
     })
 }
 
-/// The function "roll_die" takes in a single `usize` as an argument.
+/// The function `roll_die` takes in a single `usize` as an argument.
 /// That `usize` represents how many faces the dice has.
 /// It returns a single `usize` that represents the number that was rolled.
+#[must_use]
 pub fn roll_die(num_faces: usize) -> usize {
     // Set the "result" variable (which has data type "usize") to a random number from 1 to "num_faces"
     // (inclusive)
     let result: usize = rand::random_range(1..=num_faces);
     // Return the random number you rolled!
-    return result;
+    result
 }
 
 /// Roll a given number of dice with the given number of faces, both corresponding to the provided
 /// [`RollManyRequest`].
+#[must_use]
 pub fn roll_many(request: RollManyRequest) -> Vec<usize> {
     (0..request.num_dice)
         .map(|_| roll_die(request.num_faces))
@@ -109,6 +114,7 @@ pub fn roll_many(request: RollManyRequest) -> Vec<usize> {
 }
 
 #[cfg(test)]
+#[allow(clippy::unwrap_used)]
 mod tests {
     use super::*;
 
@@ -206,7 +212,7 @@ mod tests {
     #[test]
     fn roll_none() {
         let num_dice = 0;
-        let num_faces = 123456;
+        let num_faces = 123_456;
         let req = RollManyRequest {
             num_dice,
             num_faces,
