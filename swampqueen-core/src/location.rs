@@ -78,4 +78,13 @@ mod tests {
         assert_eq!(intro_text[1], TESTPLACE_P1);
         assert_eq!(intro_text[2], TESTPLACE_P2);
     }
+
+    #[test]
+    fn get_paragraphs() {
+        let file_str = std::fs::read_to_string(TESTPLACE_PATH).unwrap();
+        let testplace: Location = serde_json::from_str(&file_str).unwrap();
+        assert_eq!(testplace.paragraph("intro", 0).unwrap(), TESTPLACE_P0);
+        assert_eq!(testplace.paragraph("intro", 1).unwrap(), TESTPLACE_P1);
+        assert_eq!(testplace.paragraph("intro", 2).unwrap(), TESTPLACE_P2);
+    }
 }
