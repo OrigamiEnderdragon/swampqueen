@@ -1,13 +1,18 @@
-use std::{collections::HashMap, io};
+use std::{collections::HashMap, io, sync::LazyLock};
 
 use camino::Utf8PathBuf;
 use serde::{Deserialize, Serialize};
 
 use crate::files::try_load_json;
 
-// TODO this path is only for testing purposes; eventually it will need to be determined
-// dynamically
-const LOCATION_DIR: &str = "testfiles/locations/";
+// TODO this path is only for testing purposes; eventually it will need to be determined based on
+// config and the like
+static LOCATION_DIR: LazyLock<Utf8PathBuf> = LazyLock::new(|| {
+    let mut path = Utf8PathBuf::new();
+    path.push(env!("CARGO_MANIFEST_DIR"));
+    path.push("testfiles/locations/");
+    path
+});
 
 /// A given location within the game.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -33,16 +38,24 @@ impl Location {
         try_load_json(path)
     }
 
+    /// Get a paragraph of text from the list with the given `key`.
+    pub fn paragraph(&self, key: &str, paragraph_index: usize) -> Option<&str> {
+        self.text
+            .get(key)
+            .and_then(|paragraphs| paragraphs.get(paragraph_index))
+            .map(String::as_str)
+    }
+
     /// Helper function to construct the [`Location`] path from the given ID.
     fn get_location_path(location_id: &str) -> Utf8PathBuf {
-        let mut path = Utf8PathBuf::new();
-        path.push(LOCATION_DIR);
-        path.push(location_id);
+        let mut path: Utf8PathBuf = LOCATION_DIR.clone();
+        path.push(format!("{location_id}.json"));
         path
     }
 }
 
 #[cfg(test)]
+#[allow(clippy::unwrap_used)]
 mod tests {
     use super::*;
 
