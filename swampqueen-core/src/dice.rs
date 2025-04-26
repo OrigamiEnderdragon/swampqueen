@@ -58,6 +58,7 @@ impl Display for RolledDiceResults {
 /// # Examples
 ///
 /// ```
+/// # use swampqueen_core::dice::roll_many_from_str;
 /// // Roll three six-sided dice
 /// let results = roll_many_from_str("3d6");
 /// // Roll a d20
