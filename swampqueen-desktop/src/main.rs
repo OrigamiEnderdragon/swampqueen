@@ -1,4 +1,5 @@
 use swampqueen_core::dice::{roll_die, roll_many_from_str};
+use swampqueen_core::location::Location;
 
 fn main() {
     println!("Let's roll some dice!");
@@ -23,4 +24,10 @@ fn main() {
     println!("I CAST REAL FIREBALL!!!!!!!!");
     let fireball_result = roll_many_from_str("8d6").unwrap();
     println!("{}", fireball_result);
+
+    println!("\n=========Location Test=========\n");
+    let testplace = Location::try_load_location("testplace").unwrap();
+    println!("{}\n", testplace.paragraph("intro", 0).unwrap());
+    println!("{}\n", testplace.paragraph("intro", 1).unwrap());
+    println!("{}\n", testplace.paragraph("intro", 2).unwrap());
 }
