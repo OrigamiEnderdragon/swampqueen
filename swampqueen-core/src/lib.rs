@@ -10,3 +10,5 @@
 #![warn(clippy::dbg_macro)]
 
 pub mod dice;
+mod files;
+pub mod location;
