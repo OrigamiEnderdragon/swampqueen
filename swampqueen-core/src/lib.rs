@@ -9,6 +9,7 @@
 #![warn(clippy::todo)]
 #![warn(clippy::dbg_macro)]
 
+pub mod character;
 pub mod dice;
 mod files;
 pub mod location;
