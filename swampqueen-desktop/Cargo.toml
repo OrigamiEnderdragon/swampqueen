@@ -2,6 +2,14 @@
 name = "swampqueen-desktop"
 version = "0.1.0"
 edition = "2024"
+description = "Text RPG"
+readme = "README.md"
+homepage = "https://github.com/OrigamiEnderdragon/swampqueen"
+repository = "https://github.com/OrigamiEnderdragon/swampqueen"
+license = "AGPL-3.0"
+keywords = []
+exclude = []
+include = []
 
 [dependencies]
 swampqueen-core = { path = "../swampqueen-core" }

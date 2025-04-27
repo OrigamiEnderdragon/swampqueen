@@ -3,6 +3,14 @@ name = "swampqueen-core"
 version = "0.1.0"
 authors = ["M Siwak", "Max Gilmour"]
 edition = "2024"
+description = "Text RPG"
+readme = "README.md"
+homepage = "https://github.com/OrigamiEnderdragon/swampqueen"
+repository = "https://github.com/OrigamiEnderdragon/swampqueen"
+license = "AGPL-3.0"
+keywords = []
+exclude = []
+include = []
 
 [dependencies]
 camino = "1.1.9"
