@@ -1,8 +1,11 @@
 use std::io::{self, Write};
 
-use swampqueen_core::character::{Character, Class, Race, Stat};
-use swampqueen_core::dice::{roll_die, roll_many_from_str};
-use swampqueen_core::location::Location;
+use swampqueen_core::{
+    character::{Character, Class, Race, Stat},
+    dice::{roll_die, roll_many_from_str},
+    location::Location,
+    ui::{input, select},
+};
 
 fn main() {
     println!("Let's roll some dice!");
@@ -36,37 +39,58 @@ fn main() {
 
     println!("\n=========Character Creation Test=========\n");
 
-    print!("Name: ");
-    io::stdout().flush().unwrap();
-    let mut chosen_name = String::new();
-    io::stdin().read_line(&mut chosen_name).unwrap();
+    let chosen_name: String = input("Character name", |input| {
+        if input.is_empty() {
+            Err("You can't have an empty name!".into())
+        } else {
+            Ok(String::from(input))
+        }
+    })
+    .unwrap();
 
-    print!("Class: ");
-    io::stdout().flush().unwrap();
-    let mut chosen_class_str = String::new();
-    io::stdin().read_line(&mut chosen_class_str).unwrap();
-    let class: Class = chosen_class_str.trim().try_into().unwrap();
+    let class = select(
+        "Please select your class",
+        &[
+            Class::Hunter,
+            Class::Warden,
+            Class::Bastion,
+            Class::Soothsayer,
+            Class::Trespasser,
+        ],
+    )
+    .unwrap();
 
-    print!("Race: ");
-    io::stdout().flush().unwrap();
-    let mut chosen_race_str = String::new();
-    io::stdin().read_line(&mut chosen_race_str).unwrap();
-    let race: Race = chosen_race_str.trim().try_into().unwrap();
+    let race = select(
+        "Please select your race",
+        &[Race::InsectoidFae, Race::GoblinoidFae, Race::AlligatorFolk],
+    )
+    .unwrap();
 
-    print!("First stat bonus: ");
-    io::stdout().flush().unwrap();
-    let mut chosen_stat_1_str = String::new();
-    io::stdin().read_line(&mut chosen_stat_1_str).unwrap();
-    let stat_1: Stat = chosen_stat_1_str.trim().try_into().unwrap();
+    let stat_1 = select(
+        "Please select your first bonus stat",
+        &[
+            Stat::Slipperiness,
+            Stat::Cunning,
+            Stat::Bulk,
+            Stat::Backbone,
+            Stat::TheSight,
+        ],
+    )
+    .unwrap();
 
-    print!("Second stat bonus: ");
-    io::stdout().flush().unwrap();
-    let mut chosen_stat_2_str = String::new();
-    io::stdin().read_line(&mut chosen_stat_2_str).unwrap();
-    let stat_2: Stat = chosen_stat_2_str.trim().try_into().unwrap();
+    let stat_2 = select(
+        "Please select your second bonus stat",
+        &[
+            Stat::Slipperiness,
+            Stat::Cunning,
+            Stat::Bulk,
+            Stat::Backbone,
+            Stat::TheSight,
+        ],
+    )
+    .unwrap();
 
     let character = Character::new(&chosen_name, class, race, stat_1, stat_2);
 
-    println!("YOUR CHARACTER:");
-    dbg!(&character);
+    println!("{character}");
 }

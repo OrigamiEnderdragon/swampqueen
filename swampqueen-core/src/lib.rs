@@ -13,3 +13,4 @@ pub mod character;
 pub mod dice;
 mod files;
 pub mod location;
+pub mod ui;

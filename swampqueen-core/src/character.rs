@@ -1,7 +1,10 @@
 //! This module contains functionality related to characters. The principal type of this module is
 //! [`Character`], around which all other functionality revolves.
 
-use std::ops::{Add, AddAssign};
+use std::{
+    fmt::Display,
+    ops::{Add, AddAssign},
+};
 
 // TODO better docs
 /// A character.
@@ -35,6 +38,18 @@ impl Character {
         }
     }
 }
+impl Display for Character {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "===={}====
+{} {}
+=====================
+{}",
+            self.name, self.race, self.class, self.stats
+        )
+    }
+}
 
 // TODO better docs
 /// A class.
@@ -51,22 +66,25 @@ pub enum Class {
     /// TODO
     Bastion,
 }
-impl Class {}
-impl TryFrom<&str> for Class {
-    type Error = std::io::Error;
-    // TODO make this not suck
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
+impl From<Class> for String {
+    fn from(value: Class) -> Self {
+        (&value).into()
+    }
+}
+impl From<&Class> for String {
+    fn from(value: &Class) -> Self {
         match value {
-            "soothsayer" => Ok(Self::Soothsayer),
-            "hunter" => Ok(Self::Hunter),
-            "trespasser" => Ok(Self::Trespasser),
-            "warden" => Ok(Self::Warden),
-            "bastion" => Ok(Self::Bastion),
-            _ => Err(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "unrecognized value!!!",
-            )),
+            Class::Soothsayer => String::from("Soothsayer"),
+            Class::Bastion => String::from("Bastion"),
+            Class::Trespasser => String::from("Tresspasser"),
+            Class::Warden => String::from("Warden"),
+            Class::Hunter => String::from("Hunter"),
         }
+    }
+}
+impl Display for Class {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", String::from(self))
     }
 }
 
@@ -81,19 +99,23 @@ pub enum Race {
     /// TODO
     GoblinoidFae,
 }
-impl TryFrom<&str> for Race {
-    type Error = std::io::Error;
-    // TODO make this not suck
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
+impl From<&Race> for String {
+    fn from(value: &Race) -> Self {
         match value {
-            "alligator_folk" => Ok(Self::AlligatorFolk),
-            "insectoid_fae" => Ok(Self::InsectoidFae),
-            "goblinoid_fae" => Ok(Self::GoblinoidFae),
-            _ => Err(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "unrecognized value!!!",
-            )),
+            Race::InsectoidFae => String::from("Insectoid Fae"),
+            Race::GoblinoidFae => String::from("Goblinoid Fae"),
+            Race::AlligatorFolk => String::from("Alligator Folk"),
         }
+    }
+}
+impl From<Race> for String {
+    fn from(value: Race) -> Self {
+        (&value).into()
+    }
+}
+impl Display for Race {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", String::from(self))
     }
 }
 
@@ -112,21 +134,20 @@ pub enum Stat {
     /// TODO
     TheSight,
 }
-impl TryFrom<&str> for Stat {
-    type Error = std::io::Error;
-    // TODO make this not suck
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
+impl From<&Stat> for String {
+    fn from(value: &Stat) -> Self {
         match value {
-            "cunning" => Ok(Self::Cunning),
-            "slipperiness" => Ok(Self::Slipperiness),
-            "bulk" => Ok(Self::Bulk),
-            "backbone" => Ok(Self::Backbone),
-            "the_sight" => Ok(Self::TheSight),
-            _ => Err(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "unrecognized value!!!",
-            )),
+            Stat::TheSight => String::from("The Sight"),
+            Stat::Backbone => String::from("Backbone"),
+            Stat::Bulk => String::from("Bulk"),
+            Stat::Cunning => String::from("Cunning"),
+            Stat::Slipperiness => String::from("Slipperiness"),
         }
+    }
+}
+impl From<Stat> for String {
+    fn from(value: Stat) -> Self {
+        (&value).into()
     }
 }
 
@@ -157,7 +178,7 @@ impl StatValues {
             Stat::Bulk => self.bulk += value,
             Stat::Backbone => self.backbone += value,
             Stat::TheSight => self.the_sight += value,
-        };
+        }
     }
 
     fn add_class_bonus(&mut self, class: Class) {
@@ -242,6 +263,19 @@ impl<'a> Add<&'a StatValues> for &StatValues {
 impl AddAssign for StatValues {
     fn add_assign(&mut self, rhs: Self) {
         *self = &*self + &rhs;
+    }
+}
+impl Display for StatValues {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "|   CUNNING    | {} |
+| SLIPPERINESS | {} |
+|     BULK     | {} |
+|   BACKBONE   | {} |
+|  THE SIGHT   | {} |",
+            self.cunning, self.slipperiness, self.bulk, self.backbone, self.the_sight
+        )
     }
 }
 
